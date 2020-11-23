@@ -10,11 +10,23 @@ const db = require("../configs/mySQL");
 
 productsRouter.get("/", (req, res) => {
   // sort
+  const{ sort, sdesc } = req.query;
   let order, desc = "";
-  (req.body.ordername) ? order = "ORDER BY prd_name" : order = "";
-  (req.body.orderupdate) ? order = "ORDER BY update_at" : order = "";
-  (req.body.orderprice) ? order = "ORDER BY prd_price" : order = "";
-  (req.body.desc) ? desc = " DESC" : desc = "";
+  if ( sort ==  1 ) {
+    order = "ORDER BY prd_price"
+  } else if ( sort == 2 ) {
+    order = "ORDER BY prd_name"
+  } else if ( sort == 3 ) {
+    order = "ORDER BY updated_at"
+  }
+  if ( sdesc == 1) {
+    desc = " DESC"
+  }
+
+  // (req.body.ordername) ? order = "ORDER BY prd_name" : order = "";
+  // (req.body.orderupdate) ? order = "ORDER BY update_at" : order = "";
+  // (req.body.orderprice) ? order = "ORDER BY prd_price" : order = "";
+  // (req.body.desc) ? desc = " DESC" : desc = "";
   
   const getAllProducts = new Promise((resolve, reject) => {
     const queryString = "SELECT prd_image, prd_name, prd_brand, prd_price, prd_brand FROM products " + order + desc;
