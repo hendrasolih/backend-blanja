@@ -39,7 +39,7 @@ productsRouter.get("/", (req, res) => {
   }
   
   const getAllProducts = new Promise((resolve, reject) => {
-    const queryString = "SELECT prd_name, prd_brand, prd_price, prd_brand, prd_image, category_product.ctg_name FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " + ctg + search + order + desc;
+    const queryString = "SELECT prd_name, prd_brand, prd_price, prd_brand, prd_image, category_product.ctg_name, prd_rating FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " + ctg + search + order + desc;
     console.log(queryString);
     db.query(queryString, (err, data) => {
       if (!err) {
