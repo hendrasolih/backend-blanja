@@ -47,7 +47,7 @@ productRouter.put("/:id", (req, res) => {
   updateProductById.push(id);
 
   const updateProduct = new Promise((resolve, reject) => {
-    const qs = "UPDATE products SET prd_name = ?, prd_brand = ?, prd_price = ?, cndtn_id = ?, prd_description = ?, size_id = ?, prd_image = ?, prd_ctg = ?, created_at = ?, updated_at = ? WHERE prd_id = ?";
+    const qs = "UPDATE products SET prd_name = ?, prd_brand = ?, prd_price = ?, cndtn_id = ?, prd_description = ?, size_id = ?, prd_image = ?, prd_ctg = ?, prd_rating = ?, created_at = ?, updated_at = ? WHERE prd_id = ?";
     db.query(qs, updateProductById, (err, data) => {
       if (!err) {
         resolve(data);
