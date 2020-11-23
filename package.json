@@ -1,0 +1,16 @@
+{
+  "name": "blanjabackend",
+  "version": "1.0.0",
+  "description": "backend from blanja app",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1"
+  }
+}
