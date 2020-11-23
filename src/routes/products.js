@@ -18,10 +18,18 @@ productsRouter.get("/", (req, res) => {
     order = "ORDER BY prd_name"
   } else if ( sort == 3 ) {
     order = "ORDER BY updated_at"
+  } else {
+    order = "";
+    desc = "";
   }
-  if ( sdesc == 1) {
-    desc = " DESC"
+  if ( !order == "" ) {
+    if (sdesc == 1) {
+      desc = " DESC"
+    }
   }
+  // search
+  console.log(order)
+
 
   // (req.body.ordername) ? order = "ORDER BY prd_name" : order = "";
   // (req.body.orderupdate) ? order = "ORDER BY update_at" : order = "";
