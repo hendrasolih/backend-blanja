@@ -11,7 +11,7 @@ productRouter.get("/:id", (req, res) => {
   const { id } = req.params;
   const getProductById = new Promise((resolve, reject) => {
     const qs =
-      "SELECT p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name FROM products AS p JOIN category_product AS c WHERE p.prd_ctg = c.ctg_id AND p.prd_id = ?";
+      "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name, s.size_prd, cc.color_type FROM products AS p, category_product AS c, size AS s, product_size AS ps, color AS cc, product_color AS pc  WHERE p.prd_ctg = c.ctg_id AND p.prd_id = ps.prd_id AND s.size_id = ps.sz_id AND p.prd_id = pc.prd_id AND cc.id = pc.clr_id AND p.prd_id = ?";
     db.query(qs, id, (err, data) => {
       if (!err) {
         resolve(data);
@@ -23,7 +23,9 @@ productRouter.get("/:id", (req, res) => {
   getProductById
     .then((data) => {
       if (data.length) {
-        res.json(data[0]);
+        res.json({
+          data
+        });
       } else {
         res.status(404).json({
           msg: "Data not Found",
