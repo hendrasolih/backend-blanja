@@ -7,11 +7,21 @@ const db = require("../configs/mySQL");
 
 // localhost:8000/products
 // GET
-
 productsRouter.get("/", (req, res) => {
+  const{ sort, sdesc, s, c } = req.query;
+  let order = "";
+  let search = "";
+  let desc = "";
+  let ctg = "";
+  //category
+  if (c) {
+    ctg = "AND ctg_name REGEXP " + "'" + c + "'";
+  }
+  // search
+  if (s) {
+    search = "AND prd_name REGEXP " + "'" + s + "'";
+  }
   // sort
-  const{ sort, sdesc } = req.query;
-  let order, desc = "";
   if ( sort ==  1 ) {
     order = "ORDER BY prd_price"
   } else if ( sort == 2 ) {
@@ -27,17 +37,10 @@ productsRouter.get("/", (req, res) => {
       desc = " DESC"
     }
   }
-  // search
-  console.log(order)
-
-
-  // (req.body.ordername) ? order = "ORDER BY prd_name" : order = "";
-  // (req.body.orderupdate) ? order = "ORDER BY update_at" : order = "";
-  // (req.body.orderprice) ? order = "ORDER BY prd_price" : order = "";
-  // (req.body.desc) ? desc = " DESC" : desc = "";
   
   const getAllProducts = new Promise((resolve, reject) => {
-    const queryString = "SELECT prd_image, prd_name, prd_brand, prd_price, prd_brand FROM products " + order + desc;
+    const queryString = "SELECT prd_name, prd_brand, prd_price, prd_brand, prd_image, category_product.ctg_name FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " + ctg + search + order + desc;
+    console.log(queryString);
     db.query(queryString, (err, data) => {
       if (!err) {
         resolve(data);
