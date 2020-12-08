@@ -1,11 +1,14 @@
 const mySQL = require("mysql");
 
+const {HOST, DB, USER, PASSWORD} = process.env;
+
+
 const db = mySQL.createConnection({
   // Setting DB
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "web_blanja",
+  host: HOST,
+  user: USER,
+  password: PASSWORD,
+  database: DB,
 });
 
 db.connect((err) => {

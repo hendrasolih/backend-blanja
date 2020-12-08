@@ -8,11 +8,14 @@ const db = require("../configs/mySQL");
 
 // localhost:8000/product/{params}
 productRouter.get("/:id", (req, res) => {
+  // const level = req.decodeToken.level;
   const { id } = req.params;
   const getProductById = new Promise((resolve, reject) => {
     const qs =
-      "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name, s.size_prd, cc.color_type FROM products AS p, category_product AS c, size AS s, product_size AS ps, color AS cc, product_color AS pc  WHERE p.prd_ctg = c.ctg_id AND p.prd_id = ps.prd_id AND s.size_id = ps.sz_id AND p.prd_id = pc.prd_id AND cc.id = pc.clr_id AND p.prd_id = ?";
+      "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name, p.prd_rating FROM products AS p, category_product AS c  WHERE p.prd_ctg = c.ctg_id AND p.prd_id = ?";
     db.query(qs, id, (err, data) => {
+      console.log(id);
+      // console.log(level);
       if (!err) {
         resolve(data);
       } else {
@@ -24,7 +27,7 @@ productRouter.get("/:id", (req, res) => {
     .then((data) => {
       if (data.length) {
         res.json({
-          data
+          data,
         });
       } else {
         res.status(404).json({
@@ -47,8 +50,11 @@ productRouter.put("/:id", (req, res) => {
   updateProductById.push(id);
 
   const updateProduct = new Promise((resolve, reject) => {
-    const qs = "UPDATE products SET prd_name = ?, prd_brand = ?, prd_price = ?, cndtn_id = ?, prd_description = ?, size_id = ?, prd_image = ?, prd_ctg = ?, prd_rating = ?, created_at = ?, updated_at = ? WHERE prd_id = ?";
+    const qs =
+      "UPDATE products SET prd_name = ?, prd_brand = ?, prd_price = ?, cndtn_id = ?, prd_description = ?, size_id = ?, prd_image = ?, prd_ctg = ?, prd_rating = ?, created_at = ?, updated_at = ? WHERE prd_id = ?";
     db.query(qs, updateProductById, (err, data) => {
+      console.log(updateProductById);
+      console.log(level);
       if (!err) {
         resolve(data);
       } else {

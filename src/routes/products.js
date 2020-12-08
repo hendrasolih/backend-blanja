@@ -1,49 +1,108 @@
 const express = require("express");
-const mysql = require('mysql');
+const mysql = require("mysql");
+
+const form = require("../helpers/form");
+const singleUpload = require("../helpers/middlewares/upload");
+const multiUpload = require("../helpers/middlewares/multiUpload");
 
 const productsRouter = express.Router();
 
 const db = require("../configs/mySQL");
+const { error } = require("../helpers/form");
 
 // localhost:8000/products
 // GET
 productsRouter.get("/", (req, res) => {
-  const{ sort, sdesc, s, c } = req.query;
+  const { filter, sortDesc, search, category } = req.query;
+  const page = req.query.page || 1;
+  const limit = Number(req.query.limit) || 2;
+  const offset = (page - 1) * limit || 0;
   let order = "";
-  let search = "";
+  let querysearch = "";
   let desc = "";
   let ctg = "";
+  let lmt = "";
   //category
-  if (c) {
-    ctg = "AND ctg_name REGEXP " + "'" + c + "'";
+  if (category) {
+    ctg = "AND ctg_name REGEXP " + "'" + category + "'";
   }
   // search
-  if (s) {
-    search = "AND prd_name REGEXP " + "'" + s + "'";
+  if (search) {
+    querysearch = "AND prd_name REGEXP " + "'" + search + "'";
   }
   // sort
-  if ( sort ==  1 ) {
-    order = "ORDER BY prd_price"
-  } else if ( sort == 2 ) {
-    order = "ORDER BY prd_name"
-  } else if ( sort == 3 ) {
-    order = "ORDER BY updated_at"
+  if (filter == "price") {
+    order = "ORDER BY prd_price";
+  } else if (filter == "name") {
+    order = "ORDER BY prd_name";
+  } else if (filter == "update") {
+    order = "ORDER BY updated_at";
+  } else if (filter == "rating") {
+    order = "ORDER BY prd_rating DESC ";
+  } else if (filter == "new") {
+    order = "ORDER BY created_at DESC ";
   } else {
     order = "";
     desc = "";
   }
-  if ( !order == "" ) {
-    if (sdesc == 1) {
-      desc = " DESC"
+  if (!order == "") {
+    if (sortDesc == "true") {
+      desc = " DESC";
     }
   }
-  
-  const getAllProducts = new Promise((resolve, reject) => {
-    const queryString = "SELECT prd_name, prd_brand, prd_price, prd_brand, prd_image, category_product.ctg_name, prd_rating FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " + ctg + search + order + desc;
-    console.log(queryString);
-    db.query(queryString, (err, data) => {
+  //pagination
+  let totalProduct = 0;
+
+  const getTotalProduct = new Promise((resolve, reject) => {
+    const qs = "SELECT COUNT(prd_id) AS COUNT FROM products";
+    db.query(qs, (err, result) => {
       if (!err) {
-        resolve(data);
+        resolve(result);
+      } else {
+        reject(err);
+      }
+    });
+  });
+  getTotalProduct
+    .then((result) => {
+      totalProduct = result[0].COUNT;
+    })
+    .catch((err) => {
+      form.error(res, err);
+    });
+
+  const getAllProducts = new Promise((resolve, reject) => {
+    const queryString =
+      "SELECT prd_id, prd_name, prd_brand, prd_price, prd_brand, prd_image, category_product.ctg_name, prd_rating, created_at FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " +
+      ctg +
+      querysearch +
+      order +
+      desc +
+      "LIMIT ? OFFSET ?";
+    console.log(queryString);
+    db.query(queryString, [Number(limit), offset], (err, data) => {
+      console.log(totalProduct);
+      const totalPage = Math.ceil(totalProduct / limit);
+      const newResult = {
+        products: data,
+        pageInfo: {
+          totalPage: totalPage,
+          currentPage: page || 1,
+          previousPage:
+            page === 1 ? null : `/products?page=${page - 1}&limit=${limit}`,
+          nextPage:
+            Number(page) === totalPage
+              ? null
+              : `/products?page=${page + 1}&limit=${limit}`,
+        },
+      };
+      if (data.length === 0) {
+        reject({
+          msg: "data tidak tersedia",
+        });
+      }
+      if (!err) {
+        resolve(newResult);
       } else {
         reject(err);
       }
@@ -51,25 +110,34 @@ productsRouter.get("/", (req, res) => {
   });
   getAllProducts
     .then((data) => {
-      res.json(data);
+      res.json({
+        status: 200,
+        data,
+      });
     })
     .catch((err) => {
-      res.json(err);
+      form.error(res, err);
     });
 });
 
 // localhost:8000/products
 // POST
 
-productsRouter.post("/", (req, res) => {
+productsRouter.post("/", multiUpload, (req, res) => {
   // mendapat objek request dari client
   // melakukan query ke db
   // mengirim response
+  //const img = process.env.SERVER + "/images/" + req.file.filename; for single
+  const images = JSON.stringify(
+    req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
+  );
   const { body } = req;
   const insertBody = {
     ...body,
     created_at: new Date(Date.now()),
     updated_at: new Date(Date.now()),
+    //prd_image: img,
+    prd_image: images,
   };
   const postNewProduct = new Promise((resolve, reject) => {
     const qs = "INSERT INTO products SET ?";
@@ -107,31 +175,32 @@ productsRouter.delete("/:id", (req, res) => {
     });
   });
   deleteProductById
-  .then((data) => {
-    res.status(204).json({
-      status: 'success',
-      msg: 'Data berhasil dihapus',
-      data
+    .then((data) => {
+      res.status(204).json({
+        status: "success",
+        msg: "Data berhasil dihapus",
+        data,
+      });
+    })
+    .catch((err) => {
+      res.json(err);
     });
-  })
-  .catch((err) => {
-    res.json(err);
-  });
 });
 
-productsRouter.patch("/:id", (req, res) => {
+productsRouter.patch("/:id", multiUpload, (req, res) => {
   const { body } = req;
   const { id } = req.params;
+
   // set for update
   const entries = Object.entries(body);
-  
-  let rawSetUpdate = '';
-  entries.forEach(entry => {
+
+  let rawSetUpdate = "";
+  entries.forEach((entry) => {
     let key = entry[0];
     let value = entry[1];
-    rawSetUpdate += `${key} = '${value}', `
+    rawSetUpdate += `${key} = '${value}', `;
   });
-  const setUpdate = rawSetUpdate.slice(0, -2) + ' ';
+  const setUpdate = rawSetUpdate.slice(0, -2) + " ";
   console.log(setUpdate);
 
   const updateProductById = new Promise((resolve, reject) => {
@@ -140,26 +209,22 @@ productsRouter.patch("/:id", (req, res) => {
     db.query(qs, id, (err, _) => {
       if (!err) {
         resolve(_);
-      } else { 
-        reject(err); 
+      } else {
+        reject(err);
       }
     });
   });
   updateProductById
-  .then(() => {
-    res.status(200).json({
-      status: 'success',
-      msg: 'Data berhasil diperbaharui',
-      data: body,
+    .then(() => {
+      res.status(200).json({
+        status: "success",
+        msg: "Data berhasil diperbaharui",
+        data: body,
+      });
     })
-  })
-  .catch((err) =>{
-    res.json(err);
-  })
+    .catch((err) => {
+      res.json(err);
+    });
 });
-
-
-
-
 
 module.exports = productsRouter;

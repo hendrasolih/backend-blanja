@@ -1,17 +1,17 @@
 const db = require("../configs/mySQL");
 
 exports.searchProduct = (keyword) => {
-    return new Promise((resolve, reject) => {
-      const qs =
-        "SELECT prd_image, prd_name, prd_brand, prd_price, prd_brand FROM products WHERE prd_name LIKE ?";
-      db.query(qs, keyword, (err, data) => {
-        if (!err) {
-          resolve(data);
-        } else {
-          reject(err);
-        }
-      });
+  return new Promise((resolve, reject) => {
+    const qs =
+      "SELECT prd_image, prd_name, prd_brand, prd_price, prd_brand FROM products WHERE prd_name LIKE ?";
+    db.query(qs, keyword, (err, data) => {
+      if (!err) {
+        resolve(data);
+      } else {
+        reject(err);
+      }
     });
+  });
   };
 
 exports.searchProductByCategory = (keyword) => {
