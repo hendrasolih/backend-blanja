@@ -87,6 +87,19 @@ exports.postLogin = (body) => {
   });
 };
 
-exports.postLogout = () => {
-  return new Promise((resolve, reject) => {});
+exports.postLogout = (blacklisToken) => {
+  return new Promise((resolve, reject) => {
+    const qs = "INSERT INTO token_blacklist SET ?";
+    db.query(qs, blacklisToken, (err, data) => {
+      if (!err) {
+        resolve({
+          msg: `Logout berhasil`,
+        });
+      } else {
+        reject({
+          msg: `Logout tidak berhasil`,
+        });
+      }
+    });
+  });
 };

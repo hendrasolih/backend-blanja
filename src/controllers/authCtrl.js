@@ -33,5 +33,25 @@ module.exports = {
       });
   },
 
-  logout: () => {},
+  logout: (req, res) => {
+    const bearerToken = req.header("x-access-token");
+    if (!bearerToken) {
+      res.json({
+        msg: `token null!`,
+      });
+    } else {
+      blacklisToken = {
+        token: bearerToken.split(" ")[1],
+      };
+
+      authModel
+        .postLogout(blacklisToken)
+        .then((result) => {
+          form.success(res, result);
+        })
+        .catch((error) => {
+          form.error(res, error);
+        });
+    }
+  },
 };
