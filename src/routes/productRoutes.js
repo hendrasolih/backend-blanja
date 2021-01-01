@@ -5,7 +5,7 @@ const productCtrl = require("../controllers/productCtrl");
 const checkToken = require("../helpers/middlewares/checkToken");
 const multiUpload = require("../helpers/middlewares/multiUpload");
 
-productRouter.get("/:id", productCtrl.getProductById);
+productRouter.get("/:id", checkToken.login, productCtrl.getProductById);
 productRouter.put(
   "/:id",
   checkToken.login,

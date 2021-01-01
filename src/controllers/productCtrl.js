@@ -3,6 +3,7 @@ const form = require("../helpers/form");
 
 module.exports = {
   getProductById: (req, res) => {
+    console.log(req.headers);
     productModel
       .getProductById(req)
       .then((data) => {

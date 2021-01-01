@@ -7,6 +7,7 @@ const form = require("../form");
 module.exports = {
   login: (req, res, next) => {
     const bearerToken = req.header("x-access-token");
+    console.log(bearerToken);
     if (!bearerToken) {
       form.error(res, {
         msg: "Please Login First",

@@ -25,7 +25,7 @@ const checkToken = require("../helpers/middlewares/checkToken");
 
 mainRouter.use("/", welcomeRouter); // localhost:8000
 mainRouter.use("/products", productsRouter); // localhost:8000/products
-mainRouter.use("/product", checkToken.login, checkToken.seller, productRouter); // localhost:8000/product
+mainRouter.use("/product", productRouter); // localhost:8000/product
 //mainRouter.use("/search", searchRouter); // localhost:8000/search
 mainRouter.use("/history", historyRouter); // localhost:8000/history
 mainRouter.use("/size", sizeRouter); // localhost:8000/size

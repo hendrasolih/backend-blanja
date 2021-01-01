@@ -3,7 +3,7 @@ const db = require("../configs/mySQL");
 exports.getAllProductsModel = (req) => {
   const { filter, sortDesc, search, category } = req.query;
   const page = req.query.page || 1;
-  const limit = Number(req.query.limit) || 2;
+  const limit = Number(req.query.limit) || 4;
   const offset = (page - 1) * limit || 0;
   let order = "";
   let querysearch = "";
@@ -79,6 +79,7 @@ exports.getAllProductsModel = (req) => {
       const newResult = {
         products: data,
         pageInfo: {
+          totalResults: totalProduct,
           totalPage: totalPage,
           currentPage: page || 1,
           previousPage:
@@ -108,6 +109,7 @@ exports.postNewProduct = (req) => {
   // melakukan query ke db
   // mengirim response
   //const img = process.env.SERVER + "/images/" + req.file.filename; for single
+  console.log(req.files);
   const images = JSON.stringify(
     req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
   );

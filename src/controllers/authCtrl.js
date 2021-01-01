@@ -5,6 +5,7 @@ const form = require("../helpers/form");
 module.exports = {
   signup: (req, res) => {
     const { body } = req;
+    console.log(body);
     authModel
       .postNewUser(body)
       .then(() => {
@@ -35,6 +36,7 @@ module.exports = {
 
   logout: (req, res) => {
     const bearerToken = req.header("x-access-token");
+    console.log(req.headers);
     if (!bearerToken) {
       res.json({
         msg: `token null!`,

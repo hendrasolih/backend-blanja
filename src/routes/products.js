@@ -196,17 +196,18 @@ productsRouter.delete("/:id", (req, res) => {
 */
 
 productsRouter.patch("/:id", multiUpload, (req, res) => {
-  const { body } = req;
-  const { id } = req.params;
-
   const images = JSON.stringify(
     req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
   );
+  console.log(req.files);
+  const { body } = req;
+  const { id } = req.params;
 
   // set for update
   const entries = Object.entries(body);
+  const todayDate = new Date().toISOString().slice(0, 10);
 
-  let rawSetUpdate = "";
+  let rawSetUpdate = `updated_at = '${todayDate}', `;
   if (req.files.length !== 0) {
     console.log("true");
     rawSetUpdate = `prd_image = '${images}', `;

@@ -21,6 +21,8 @@ module.exports = {
       req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
     );
     const { body } = req;
+    console.log(body);
+    console.log(images);
     const insertBody = {
       ...body,
       created_at: new Date(Date.now()),

@@ -41,15 +41,26 @@ exports.postLogin = (body) => {
   // sign => mendapatkan token dari payload
   // token dikirim ke client
   return new Promise((resolve, reject) => {
-    const { user_name, user_password } = body;
+    if (body.email == 0 || body.user_password == 0) {
+      return reject({
+        msg: "input user",
+      });
+    }
+    const { email, user_password } = body;
     const qs =
-      "SELECT users.user_password, levels.level FROM users JOIN levels ON levels.id = users.level_id WHERE user_name=?";
-    db.query(qs, user_name, (err, data) => {
+      "SELECT users.user_password, levels.level FROM users JOIN levels ON levels.id = users.level_id WHERE email=?";
+    db.query(qs, email, (err, data) => {
       if (err) {
         reject({
           msg: "Error SQL",
           status: 500,
           err,
+        });
+      }
+      console.log(data);
+      if (data == undefined) {
+        return reject({
+          msg: "error",
         });
       }
       if (!data[0]) {
@@ -74,7 +85,7 @@ exports.postLogin = (body) => {
             });
           } else {
             const payload = {
-              user_name,
+              email,
               level: data[0].level,
             };
             const secret = process.env.SECRET_KEY;

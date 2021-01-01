@@ -12,7 +12,6 @@ const app = express();
 app.use(logger("dev"));
 
 // memperbolehkan access dari semua origin
-
 app.use(cors());
 
 //cors
