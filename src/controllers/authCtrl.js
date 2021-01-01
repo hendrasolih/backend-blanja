@@ -8,6 +8,10 @@ async function whiteListToken(token) {
   await db.query("INSERT INTO token_whitelist SET token=?", token);
 }
 
+async function deleteOtp(otp) {
+  await db.query("DELETE FROM tb_otp WHERE otp=?", otp);
+}
+
 module.exports = {
   signup: (req, res) => {
     const { body } = req;
@@ -39,6 +43,20 @@ module.exports = {
       })
       .catch((err) => {
         console.log(err);
+        form.error(res, err);
+      });
+  },
+
+  otpLogin: (req, res) => {
+    const { body } = req;
+    authModel
+      .postOtp(body)
+      .then(async (data) => {
+        console.log(data[0].otp);
+        await deleteOtp(data[0].otp);
+        form.success(res, data);
+      })
+      .catch((err) => {
         form.error(res, err);
       });
   },

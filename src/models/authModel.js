@@ -167,3 +167,44 @@ exports.sendEmailUser = (body) => {
     });
   });
 };
+
+exports.postOtp = (body) => {
+  // query ke DB => SELECT password WHERE username == username body
+  // compare body password dengan password DB
+  // jwt => sign, verify
+  // sign => mendapatkan token dari payload
+  // token dikirim ke client
+  return new Promise((resolve, reject) => {
+    if (body.otp == 0) {
+      return reject({
+        msg: "input otp",
+      });
+    }
+    const { otp } = body;
+    const qs = "SELECT otp FROM tb_otp WHERE otp = ?";
+    db.query(qs, otp, (err, data) => {
+      console.log(qs);
+      if (err) {
+        reject({
+          msg: "Error SQL",
+          status: 500,
+          err,
+        });
+      }
+      console.log(data);
+      if (data == undefined) {
+        return reject({
+          msg: "error",
+        });
+      }
+      if (!data[0]) {
+        reject({
+          msg: "OTP Not Found",
+          status: 404,
+        });
+      } else {
+        resolve(data);
+      }
+    });
+  });
+};
