@@ -3,6 +3,10 @@ const jwt = require("jsonwebtoken");
 
 const db = require("../configs/mySQL");
 
+function saveOtp(otp) {
+  db.query("INSERT INTO tb_otp SET otp=?", otp);
+}
+
 exports.postNewUser = (body) => {
   //gensalt
   //hash
@@ -118,6 +122,46 @@ exports.postLogout = (whitelisttoken) => {
       } else {
         reject({
           msg: `Logout tidak berhasil`,
+        });
+      }
+    });
+  });
+};
+
+exports.sendEmailUser = (body) => {
+  return new Promise((resolve, reject) => {
+    const queryStr = "SELECT id, email FROM users WHERE email = ?";
+    db.query(queryStr, [body.email], (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      console.log(data.email);
+      if (data.length !== 0) {
+        console.log(data[0]);
+        function generateOTP() {
+          var string =
+            "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";
+          let OTP = "";
+          var len = string.length;
+          for (let i = 0; i < 6; i++) {
+            OTP += string[Math.floor(Math.random() * len)];
+          }
+          return OTP;
+        }
+        let otp = generateOTP();
+        console.log(otp);
+        //localStorage.setItem("userId", data[0].id_user);
+        saveOtp(otp);
+
+        // let link = `${process.env.REACT_APP_URL}/Confirmation-password?id_user=${data[0].id_user}`
+        resolve({
+          email: data[0].email,
+          otp: otp,
+          userId: data[0].id,
+        });
+      } else {
+        reject({
+          msg: "data not found",
         });
       }
     });

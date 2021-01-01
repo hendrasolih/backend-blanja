@@ -2,6 +2,7 @@ const authModel = require("../models/authModel");
 const authRouter = require("../routes/authRoutes");
 const form = require("../helpers/form");
 const db = require("../configs/mySQL");
+const nodemailer = require("nodemailer");
 
 async function whiteListToken(token) {
   await db.query("INSERT INTO token_whitelist SET token=?", token);
@@ -62,5 +63,42 @@ module.exports = {
           form.error(res, error);
         });
     }
+  },
+
+  sendEmailUser: (req, res) => {
+    console.log(req.body);
+    authModel
+      .sendEmailUser(req.body)
+      .then(async (data) => {
+        //form.success(res, data);
+        let transporter = await nodemailer.createTransport({
+          host: process.env.EMAIL_HOST,
+          port: process.env.EMAIL_PORT,
+          auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
+          },
+        });
+        const mailOptions = {
+          from: "Hendra <admin@blanja.com>",
+          to: data.email,
+          subject: "Reset Password",
+          text: `Otp to reset password : ${data.otp}`,
+        };
+        await transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+          // res.json({
+          //   test: "test",
+          // });
+        });
+        form.success(res, data.userId);
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
   },
 };
