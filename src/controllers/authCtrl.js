@@ -119,4 +119,22 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  newPassCtrl: (req, res) => {
+    const { body } = req;
+    const { id } = req.params;
+    console.log(body);
+    console.log(id);
+    authModel
+      .postNewPass(id, body)
+      .then((data) => {
+        res.status(200).json({
+          msg: "Password berhasil diperbaharui",
+          data: data,
+        });
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  },
 };
