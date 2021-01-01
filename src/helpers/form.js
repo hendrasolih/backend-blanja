@@ -7,6 +7,6 @@ module.exports = {
     res.json(resObject);
   },
   error: (res, err) => {
-    res.status(500).json(err);
+    res.status(err.status || 500).json(err);
   },
 };

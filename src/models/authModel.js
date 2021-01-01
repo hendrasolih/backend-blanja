@@ -48,7 +48,7 @@ exports.postLogin = (body) => {
     }
     const { email, user_password } = body;
     const qs =
-      "SELECT users.user_password, levels.level FROM users JOIN levels ON levels.id = users.level_id WHERE email=?";
+      "SELECT users.user_password, levels.level, users.id FROM users JOIN levels ON levels.id = users.level_id WHERE email=?";
     db.query(qs, email, (err, data) => {
       if (err) {
         reject({
@@ -90,7 +90,10 @@ exports.postLogin = (body) => {
             };
             const secret = process.env.SECRET_KEY;
             const token = jwt.sign(payload, secret);
-            resolve(token);
+            resolve({
+              token,
+              user_id: data[0].id,
+            });
           }
         });
       }
@@ -98,10 +101,16 @@ exports.postLogin = (body) => {
   });
 };
 
-exports.postLogout = (blacklisToken) => {
+exports.postLogout = (whitelisttoken) => {
   return new Promise((resolve, reject) => {
-    const qs = "INSERT INTO token_blacklist SET ?";
-    db.query(qs, blacklisToken, (err, data) => {
+    const qs = "DELETE FROM token_whitelist WHERE token=?";
+    db.query(qs, whitelisttoken, (err, data) => {
+      if (data.affectedRows === 0) {
+        reject({
+          status: 404,
+          msg: "token tidak ditemukan, login gagal",
+        });
+      }
       if (!err) {
         resolve({
           msg: `Logout berhasil`,

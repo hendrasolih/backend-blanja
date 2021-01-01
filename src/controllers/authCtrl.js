@@ -1,6 +1,11 @@
 const authModel = require("../models/authModel");
 const authRouter = require("../routes/authRoutes");
 const form = require("../helpers/form");
+const db = require("../configs/mySQL");
+
+async function whiteListToken(token) {
+  await db.query("INSERT INTO token_whitelist SET token=?", token);
+}
 
 module.exports = {
   signup: (req, res) => {
@@ -26,10 +31,13 @@ module.exports = {
 
     authModel
       .postLogin(body)
-      .then((data) => {
+      .then(async (data) => {
+        // console.log(data.token);
+        await whiteListToken(data.token);
         form.success(res, data);
       })
       .catch((err) => {
+        console.log(err);
         form.error(res, err);
       });
   },
@@ -42,12 +50,11 @@ module.exports = {
         msg: `token null!`,
       });
     } else {
-      blacklisToken = {
-        token: bearerToken.split(" ")[1],
-      };
+      const token = bearerToken.split(" ")[1];
+      console.log(token);
 
       authModel
-        .postLogout(blacklisToken)
+        .postLogout(token)
         .then((result) => {
           form.success(res, result);
         })
