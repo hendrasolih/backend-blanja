@@ -22,4 +22,19 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  getReview: (req, res) => {
+    const { id } = req.params;
+    reviewsModel
+      .getReview(id)
+      .then((data) => {
+        console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };

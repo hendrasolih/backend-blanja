@@ -20,3 +20,20 @@ exports.postReview = (insertBody) => {
     });
   });
 };
+
+exports.getReview = (id) => {
+  return new Promise((resolve, reject) => {
+    const qs =
+      "SELECT r.id AS id_review, r.review, r.rating, u.user_name, u.photo_user FROM reviews AS r JOIN users AS u ON r.user_id = u.id WHERE r.prd_id = ?";
+    db.query(qs, id, (err, data) => {
+      if (!err) {
+        resolve(data);
+      } else {
+        reject({
+          status: 500,
+          msg: "Internal Server Error",
+        });
+      }
+    });
+  });
+};
