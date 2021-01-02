@@ -19,6 +19,7 @@ const productsRouter = require("./productsRoutes");
 const historyRouter = require("./historyRoutes");
 const authRouter = require("./authRoutes");
 const productRouter = require("./productRoutes");
+const reviewsRouter = require("./reviewsRoutes");
 
 const checkToken = require("../helpers/middlewares/checkToken");
 //const checkSeller = require("../helpers/middlewares/checkSeller");
@@ -38,5 +39,5 @@ mainRouter.use(
   checkToken.seller,
   updateMultipleUpload
 ); // localhost:8000/upload
-
+mainRouter.use("/review", reviewsRouter); // localhost:8000/reviews
 module.exports = mainRouter;
