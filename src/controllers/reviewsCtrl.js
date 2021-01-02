@@ -37,4 +37,19 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  getRating: (req, res) => {
+    const { id } = req.params;
+    reviewsModel
+      .getRatings(id)
+      .then((data) => {
+        console.log(data);
+        res.json({
+          ratings: Number(data),
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };

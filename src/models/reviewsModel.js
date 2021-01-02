@@ -37,3 +37,20 @@ exports.getReview = (id) => {
     });
   });
 };
+
+exports.getRatings = (id) => {
+  return new Promise((resolve, reject) => {
+    const qs =
+      "SELECT FORMAT(AVG(rating), 1) AS ratings FROM reviews WHERE prd_id = ?";
+    db.query(qs, id, (err, data) => {
+      if (!err) {
+        resolve(data[0].ratings);
+      } else {
+        reject({
+          status: 500,
+          msg: "Internal Server Error",
+        });
+      }
+    });
+  });
+};
