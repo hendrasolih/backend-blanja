@@ -16,21 +16,17 @@ module.exports = {
     } else {
       const token = bearerToken.split(" ")[1];
       return new Promise((resolve, reject) => {
-        const qs = "Select token FROM token_blacklist WHERE token = ?";
+        const qs = "Select token FROM token_whitelist WHERE token = ?";
         db.query(qs, token, (err, data) => {
-          console.log(data);
+          //console.log(data);
           if (!err) {
             if (!data[0]) {
-              resolve(token);
-            } else {
               reject({
                 msg: `Invalid Token`,
               });
+            } else {
+              resolve(token);
             }
-          } else {
-            reject({
-              msg: `Error SQL`,
-            });
           }
         });
       })
