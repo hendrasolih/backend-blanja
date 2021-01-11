@@ -3,10 +3,6 @@ const express = require("express");
 const mainRouter = express.Router();
 
 const welcomeRouter = require("./welcome"); //no need
-//const productsRouter = require("./products");
-//const productRouter = require("./product");
-//const searchRouter = require("./search");
-//const historyRouter = require("./history");
 const sizeRouter = require("./size"); //no need
 const colorRouter = require("./color"); // no need
 const updateMultipleUpload = require("./products");
@@ -21,6 +17,7 @@ const authRouter = require("./authRoutes");
 const productRouter = require("./productRoutes");
 const reviewsRouter = require("./reviewsRoutes");
 const addressRouter = require("./addressRoutes");
+const categoryRouter = require("./categoryRoutes");
 
 const checkToken = require("../helpers/middlewares/checkToken");
 //const checkSeller = require("../helpers/middlewares/checkSeller");
@@ -41,5 +38,6 @@ mainRouter.use(
   updateMultipleUpload
 ); // localhost:8000/upload
 mainRouter.use("/review", reviewsRouter); // localhost:8000/reviews
-mainRouter.use("/address", addressRouter); // localhost:8000/reviews
+mainRouter.use("/address", addressRouter); // localhost:8000/address
+mainRouter.use("/category", categoryRouter); // localhost:8000/category
 module.exports = mainRouter;
