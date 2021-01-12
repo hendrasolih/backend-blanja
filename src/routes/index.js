@@ -18,6 +18,7 @@ const productRouter = require("./productRoutes");
 const reviewsRouter = require("./reviewsRoutes");
 const addressRouter = require("./addressRoutes");
 const categoryRouter = require("./categoryRoutes");
+const userRouter = require("./userRoutes");
 
 const checkToken = require("../helpers/middlewares/checkToken");
 //const checkSeller = require("../helpers/middlewares/checkSeller");
@@ -40,4 +41,5 @@ mainRouter.use(
 mainRouter.use("/review", reviewsRouter); // localhost:8000/reviews
 mainRouter.use("/address", addressRouter); // localhost:8000/address
 mainRouter.use("/category", categoryRouter); // localhost:8000/category
+mainRouter.use("/user", userRouter); // localhost:8000/user
 module.exports = mainRouter;
