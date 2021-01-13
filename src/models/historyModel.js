@@ -30,4 +30,20 @@ module.exports = {
       });
     });
   },
+
+  getHistoryById: (id) => {
+    return new Promise((resolve, reject) => {
+      const qs = "SELECT * FROM invoice WHERE user_id = ?";
+      db.query(qs, id, (err, data) => {
+        if (!err) {
+          resolve(data);
+        } else {
+          reject({
+            status: 500,
+            msg: "Internal Server Error",
+          });
+        }
+      });
+    });
+  },
 };

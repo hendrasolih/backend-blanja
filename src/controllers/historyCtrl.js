@@ -49,4 +49,19 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  getHistoryById: (req, res) => {
+    const { id } = req.params;
+    historyModel
+      .getHistoryById(id)
+      .then((data) => {
+        console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };
