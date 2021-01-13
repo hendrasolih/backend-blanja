@@ -14,4 +14,20 @@ module.exports = {
       });
     });
   },
+
+  postHistory: (insertData) => {
+    return new Promise((resolve, reject) => {
+      const qs = "INSERT INTO invoice SET ?";
+      db.query(qs, insertData, (err, data) => {
+        if (!err) {
+          resolve(data);
+        } else {
+          reject({
+            status: 500,
+            msg: "Internal Server Error",
+          });
+        }
+      });
+    });
+  },
 };
