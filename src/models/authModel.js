@@ -97,6 +97,7 @@ exports.postLogin = (body) => {
             resolve({
               token,
               user_id: data[0].id,
+              level: data[0].level,
             });
           }
         });
