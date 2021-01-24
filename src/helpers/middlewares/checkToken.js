@@ -52,7 +52,7 @@ module.exports = {
   },
   seller: (req, res, next) => {
     const { level } = req.decodeToken;
-    if (level == "Seller") {
+    if (level == "Customer") {
       form.error(res, {
         status: 401,
         msg: `Unauthorized Access`,

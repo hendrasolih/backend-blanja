@@ -197,7 +197,7 @@ productsRouter.delete("/:id", (req, res) => {
 
 productsRouter.patch("/:id", multiUpload, (req, res) => {
   const images = JSON.stringify(
-    req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
+    req.files.map((e) => process.env.RN + "/images/" + e.filename)
   );
   console.log(req.files);
   const { body } = req;

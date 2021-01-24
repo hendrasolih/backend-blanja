@@ -6,6 +6,11 @@ const checkToken = require("../helpers/middlewares/checkToken");
 const multiUpload = require("../helpers/middlewares/multiUpload");
 
 productRouter.get("/:id", checkToken.login, productCtrl.getProductById);
+productRouter.get(
+  "/user/:id",
+  checkToken.login,
+  productCtrl.getProductByUserId
+);
 productRouter.put(
   "/:id",
   checkToken.login,

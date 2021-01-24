@@ -17,6 +17,7 @@ module.exports = {
   },
 
   postNewProductCtrl: (req, res) => {
+    console.log("hire " + req.files);
     const images = JSON.stringify(
       req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
     );
@@ -41,6 +42,20 @@ module.exports = {
       })
       .catch((err) => {
         res.json(err);
+      });
+  },
+
+  getAllProductsRating: (req, res) => {
+    productsModel
+      .getAllWithRatings()
+      .then((data) => {
+        res.json({
+          status: 200,
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
       });
   },
 };

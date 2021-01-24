@@ -29,6 +29,8 @@ exports.getAllProductsModel = (req) => {
     order = "ORDER BY prd_rating DESC ";
   } else if (filter == "new") {
     order = "ORDER BY created_at DESC ";
+  } else if (filter == "priceD") {
+    order = "ORDER BY prd_price DESC ";
   } else {
     order = "";
     desc = "";
@@ -111,7 +113,7 @@ exports.postNewProduct = (req) => {
   //const img = process.env.SERVER + "/images/" + req.file.filename; for single
   console.log(req.files);
   const images = JSON.stringify(
-    req.files.map((e) => process.env.SERVER + "/images/" + e.filename)
+    req.files.map((e) => process.env.RN + "/images/" + e.filename)
   );
   const { body } = req;
   const insertBody = {
@@ -124,6 +126,20 @@ exports.postNewProduct = (req) => {
   return new Promise((resolve, reject) => {
     const qs = "INSERT INTO products SET ?";
     db.query(qs, insertBody, (err, data) => {
+      if (!err) {
+        resolve(data);
+      } else {
+        reject(err);
+      }
+    });
+  });
+};
+
+exports.getAllWithRatings = () => {
+  return new Promise((resolve, reject) => {
+    const qs =
+      "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.size_id, p.prd_image, p.prd_ctg, p.prd_rating, COUNT(r.review) AS total_review,  AVG(r.rating) AS rating_product FROM products AS p LEFT JOIN reviews AS r ON p.prd_id = r.prd_id GROUP BY p.prd_id ORDER BY `total_review` DESC LIMIT 10";
+    db.query(qs, (err, data) => {
       if (!err) {
         resolve(data);
       } else {
