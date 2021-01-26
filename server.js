@@ -7,10 +7,16 @@ const socketio = require("socket.io");
 const server = http.createServer(app);
 const io = socketio(server).sockets;
 io.on("connection", (socket) => {
+  const id = socket.handshake.query.user_id;
+
   console.log("a user connected ...", socket.id);
-  socket.on("chat message", (msg) => {
-    console.log(msg);
-    io.emit("chat message", msg);
+
+  socket.join(id);
+
+  socket.on("chat message", (msg, id_recepient) => {
+    console.log(msg.sender);
+    console.log(id_recepient);
+    io.to(id_recepient).to(id).emit("chat message", msg);
   });
 });
 //socket io
