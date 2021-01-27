@@ -52,7 +52,7 @@ exports.postLogin = (body) => {
     }
     const { email, user_password } = body;
     const qs =
-      "SELECT users.user_password, levels.level, users.id FROM users JOIN levels ON levels.id = users.level_id WHERE email=?";
+      "SELECT users.user_password, levels.level, users.id, users.user_name FROM users JOIN levels ON levels.id = users.level_id WHERE email=?";
     db.query(qs, email, (err, data) => {
       if (err) {
         reject({
@@ -98,6 +98,7 @@ exports.postLogin = (body) => {
               token,
               user_id: data[0].id,
               level: data[0].level,
+              user_name: data[0].user_name,
             });
           }
         });

@@ -9,12 +9,13 @@ const io = socketio(server).sockets;
 io.on("connection", (socket) => {
   const id = socket.handshake.query.user_id;
 
-  console.log("a user connected ...", socket.id);
+  console.log("a user connected ...", id, socket.id);
 
   socket.join(id);
 
   socket.on("chat message", (msg, id_recepient) => {
-    console.log(msg.sender);
+    console.log(msg);
+    //console.log(msg.sender);
     console.log(id_recepient);
     io.to(id_recepient).to(id).emit("chat message", msg);
   });
