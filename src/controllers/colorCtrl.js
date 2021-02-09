@@ -6,7 +6,7 @@ module.exports = {
     colorModel
       .getColor()
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         res.json({
           data,
         });
