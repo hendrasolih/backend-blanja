@@ -10,7 +10,6 @@ sizeRouter.get("/:id", (req, res) => {
     const qs =
       "SELECT s.size_id, p.prd_id, s.size_prd FROM products AS p, size AS s, product_size AS ps WHERE p.prd_id = ps.prd_id AND s.size_id = ps.sz_id AND p.prd_id = ?";
     db.query(qs, id, (err, data) => {
-      console.log(id);
       if (!err) {
         resolve(data);
       } else {
