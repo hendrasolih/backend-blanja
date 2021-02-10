@@ -29,6 +29,11 @@ exports.postNewUser = (body) => {
         db.query(qs, newBody, (err, data) => {
           if (!err) {
             resolve(data);
+          } else if (err.code == "ER_DUP_ENTRY") {
+            reject({
+              msg: "User Email Already Registered",
+              status: 409,
+            });
           } else {
             reject(err);
           }
