@@ -22,7 +22,7 @@ module.exports = {
     const { id } = req.params;
     return new Promise((resolve, reject) => {
       const qs =
-        "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name, p.prd_rating, p.size_id FROM products AS p, category_product AS c  WHERE p.prd_ctg = c.ctg_id AND p.user_id = ?";
+        "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name, p.prd_rating, p.size_id FROM products AS p, category_product AS c  WHERE p.prd_ctg = c.ctg_id AND p.user_id = ? ORDER BY p.created_at DESC";
       db.query(qs, id, (err, data) => {
         console.log(id);
         // console.log(level);
