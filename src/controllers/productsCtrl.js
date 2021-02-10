@@ -58,4 +58,18 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  getFilter: (req, res) => {
+    productsModel
+      .getFilter(req)
+      .then((data) => {
+        res.json({
+          status: 200,
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };
