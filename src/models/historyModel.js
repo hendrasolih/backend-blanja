@@ -15,6 +15,22 @@ module.exports = {
     });
   },
 
+  getHistoryBySellerId: (id) => {
+    return new Promise((resolve, reject) => {
+      const qs = "SELECT * FROM invoice WHERE seller_id = ?";
+      db.query(qs, id, (err, data) => {
+        if (!err) {
+          resolve(data);
+        } else {
+          reject({
+            status: 500,
+            msg: "Internal Server Error",
+          });
+        }
+      });
+    });
+  },
+
   postHistory: (insertData) => {
     return new Promise((resolve, reject) => {
       const qs = "INSERT INTO invoice SET ?";
@@ -35,6 +51,22 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const qs = "SELECT * FROM invoice WHERE user_id = ?";
       db.query(qs, id, (err, data) => {
+        if (!err) {
+          resolve(data);
+        } else {
+          reject({
+            status: 500,
+            msg: "Internal Server Error",
+          });
+        }
+      });
+    });
+  },
+
+  updateStatus: (id, status) => {
+    return new Promise((resolve, reject) => {
+      const qs = `UPDATE invoice SET status = ? WHERE id = ?`;
+      db.query(qs, [status, id], (err, data) => {
         if (!err) {
           resolve(data);
         } else {

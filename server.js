@@ -6,6 +6,7 @@ const socketio = require("socket.io");
 //socket io
 const server = http.createServer(app);
 const io = socketio(server).sockets;
+
 io.on("connection", (socket) => {
   const id = socket.handshake.query.user_id;
 
@@ -18,6 +19,22 @@ io.on("connection", (socket) => {
     //console.log(msg.sender);
     console.log(id_recepient);
     io.to(id_recepient).to(id).emit("chat message", msg);
+  });
+
+  socket.on("sending", (customer_id) => {
+    io.to(customer_id).emit(
+      "sending customer",
+      "Your product is being shipped now"
+    );
+    io.to(id).emit("sending seller", "Product status is Shipping now");
+  });
+
+  socket.on("recieved", (seller_id) => {
+    io.to(seller_id).emit(
+      "recieved seller",
+      "Customer has received the product"
+    );
+    io.to(id).emit("recieved customer", "Product status is Delivered now");
   });
 });
 //socket io
