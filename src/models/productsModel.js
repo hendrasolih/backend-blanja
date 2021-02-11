@@ -89,7 +89,7 @@ exports.getAllProductsModel = (req) => {
           nextPage:
             Number(page) === totalPage
               ? null
-              : `/products?page=${page + 1}&limit=${limit}`,
+              : `/products?page=${Number(page) + 1}&limit=${limit}`,
         },
       };
       if (data.length == 0) {
