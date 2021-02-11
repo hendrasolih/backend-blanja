@@ -137,4 +137,14 @@ module.exports = {
         res.json(err);
       });
   },
+
+  tokenlogin: (req, res) => {
+    try {
+      res.status(200).json({
+        msg: "token valid",
+      });
+    } catch (error) {
+      form.error(res, error);
+    }
+  },
 };

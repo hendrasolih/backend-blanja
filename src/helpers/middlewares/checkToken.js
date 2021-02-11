@@ -37,7 +37,7 @@ module.exports = {
             next();
           } catch (error) {
             form.error(res, {
-              msg: "Invalid Token",
+              msg: "Invalid Token Here",
               error,
             });
           }
