@@ -19,6 +19,7 @@ const categoryRouter = require("./categoryRoutes");
 const userRouter = require("./userRoutes");
 const colorRouter = require("./colorRoutes");
 const sizeRouter = require("./sizeRoutes");
+const chatRouter = require("./chatRoutes");
 
 const checkToken = require("../helpers/middlewares/checkToken");
 //const checkSeller = require("../helpers/middlewares/checkSeller");
@@ -42,4 +43,5 @@ mainRouter.use("/review", reviewsRouter); // localhost:8000/reviews
 mainRouter.use("/address", addressRouter); // localhost:8000/address
 mainRouter.use("/category", categoryRouter); // localhost:8000/category
 mainRouter.use("/user", userRouter); // localhost:8000/user
+mainRouter.use("/chat", chatRouter); // localhost:8000/chat
 module.exports = mainRouter;

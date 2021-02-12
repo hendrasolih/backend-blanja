@@ -14,11 +14,11 @@ io.on("connection", (socket) => {
 
   socket.join(id);
 
-  socket.on("chat message", (msg, id_recepient) => {
+  socket.on("chat message", (msg, id_recepient, room_id) => {
     console.log(msg);
     //console.log(msg.sender);
     console.log(id_recepient);
-    io.to(id_recepient).to(id).emit("chat message", msg);
+    io.to(id_recepient).to(id).emit(room_id, msg);
   });
 
   socket.on("sending", (customer_id) => {
