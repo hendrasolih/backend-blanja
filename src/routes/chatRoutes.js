@@ -6,6 +6,6 @@ chatRouter.get("/seller/:id", chatController.getRoomSeller);
 chatRouter.get("/customer/:id", chatController.getRoomCustomer);
 chatRouter.post("/", chatController.postChat);
 chatRouter.get("/:id", chatController.getChatByRoomId);
-//chatRouter.post("/:id", chatController.postNewAddress);
+chatRouter.post("/room", chatController.postRoomChat);
 
 module.exports = chatRouter;

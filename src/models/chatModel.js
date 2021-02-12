@@ -53,6 +53,24 @@ module.exports = {
     });
   },
 
+  postRoomChat: (body) => {
+    return new Promise((resolve, reject) => {
+      const qs = "INSERT INTO room_list SET ?";
+      db.query(qs, body, (err, data) => {
+        if (!err) {
+          resolve({
+            body,
+          });
+        } else {
+          reject({
+            status: 500,
+            msg: "Internal Server Error",
+          });
+        }
+      });
+    });
+  },
+
   getChayByRoomId: (id) => {
     return new Promise((resolve, reject) => {
       const qs = "SELECT * FROM tb_chat WHERE room_id = ?";

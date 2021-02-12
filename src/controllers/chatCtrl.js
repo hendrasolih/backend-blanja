@@ -61,4 +61,19 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  postRoomChat: (req, res) => {
+    const { body } = req;
+    chatModel
+      .postRoomChat(body)
+      .then((data) => {
+        //console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };
