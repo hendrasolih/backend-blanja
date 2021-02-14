@@ -28,4 +28,20 @@ module.exports = {
       });
     });
   },
+
+  postSizes: (req) => {
+    const insert = req.body;
+    console.log(req.body);
+    return new Promise((resolve, reject) => {
+      const qs = "INSERT INTO product_size (prd_id, sz_id) VALUES ?";
+      db.query(qs, [insert], (err, data) => {
+        //console.log(id);
+        if (!err) {
+          resolve(data);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  },
 };

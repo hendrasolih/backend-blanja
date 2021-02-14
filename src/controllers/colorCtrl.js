@@ -35,4 +35,18 @@ module.exports = {
         res.json(err);
       });
   },
+
+  postColors: (req, res) => {
+    colorModel
+      .postColors(req)
+      .then((data) => {
+        //console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };

@@ -29,4 +29,20 @@ module.exports = {
       });
     });
   },
+
+  postColors: (req) => {
+    const insert = req.body;
+    console.log(req.body);
+    return new Promise((resolve, reject) => {
+      const qs = "INSERT INTO product_color (prd_id, clr_id) VALUES ?";
+      db.query(qs, [insert], (err, data) => {
+        //console.log(id);
+        if (!err) {
+          resolve(data);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  },
 };

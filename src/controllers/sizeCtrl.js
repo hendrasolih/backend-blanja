@@ -35,4 +35,18 @@ module.exports = {
         res.json(err);
       });
   },
+
+  postSizes: (req, res) => {
+    sizeModel
+      .postSizes(req)
+      .then((data) => {
+        //console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };
