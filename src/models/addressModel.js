@@ -32,3 +32,19 @@ exports.getAddress = (id) => {
     });
   });
 };
+
+exports.deleteAddress = (id) => {
+  return new Promise((resolve, reject) => {
+    const qs = "DELETE FROM address WHERE address.id = ?";
+    db.query(qs, id, (err, data) => {
+      if (!err) {
+        resolve(data);
+      } else {
+        reject({
+          status: 500,
+          msg: "Internal Server Error",
+        });
+      }
+    });
+  });
+};

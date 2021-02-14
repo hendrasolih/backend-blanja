@@ -37,4 +37,19 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  deleteAddress: (req, res) => {
+    const { id } = req.params;
+    addressModel
+      .deleteAddress(id)
+      .then((data) => {
+        //console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };
