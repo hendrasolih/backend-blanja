@@ -84,14 +84,17 @@ module.exports = {
   },
 
   sendEmailUser: (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     authModel
       .sendEmailUser(req.body)
       .then(async (data) => {
         //form.success(res, data);
         let transporter = await nodemailer.createTransport({
-          host: process.env.EMAIL_HOST,
-          port: process.env.EMAIL_PORT,
+          //host: process.env.EMAIL_HOST,
+          //port: process.env.EMAIL_PORT,
+          service: "gmail",
+          host: "smtp.gmail.com",
+          port: 578,
           auth: {
             user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD,

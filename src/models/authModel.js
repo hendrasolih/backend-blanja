@@ -144,7 +144,7 @@ exports.sendEmailUser = (body) => {
       }
       console.log(data.email);
       if (data.length !== 0) {
-        console.log(data[0]);
+        //console.log(data[0]);
         function generateOTP() {
           var string =
             "0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ";
@@ -156,7 +156,7 @@ exports.sendEmailUser = (body) => {
           return OTP;
         }
         let otp = generateOTP();
-        console.log(otp);
+        //console.log(otp);
         //localStorage.setItem("userId", data[0].id_user);
         saveOtp(otp);
 
