@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2021 at 05:09 AM
+-- Generation Time: Feb 15, 2021 at 05:28 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -212,7 +212,7 @@ INSERT INTO `products` (`prd_id`, `prd_name`, `prd_brand`, `prd_price`, `cndtn_i
 (43, 'test tas image array 23', 'Adidas wakabayasi', 800364, 1, 'Bisa Ayo', 5, '[\"/images/1608115095443-image.jpg\"]', 1, 4.5, 3, '2020-11-23', '2021-01-05'),
 (47, 'Tas Eiger 2.1', 'uniqlo', 500000, 1, 'baggus banget', 5, '[\"/images/1608042671143-image.jpg\"]', 1, 4.5, 3, '2020-11-23', '2021-01-05'),
 (48, 'Tas Eiger 2.1', 'uniqlo', 500000, 1, 'baggus banget', 5, '[\"/images/1608027193732-image.jpg\"]', 1, 4.5, 3, '2020-11-23', '2021-01-05'),
-(49, 'Tas Eiger 2.0', 'uniqlo', 500000, 1, 'baggus banget', 5, '[\"/images/1608041935645-image.jpg\"]', 1, 4.5, 3, '0000-00-00', '0000-00-00'),
+(49, 'Tas Eiger 2.0', 'uniqlo', 500000, 1, 'baggus banget', 5, '[\"/images/1608041935645-image.jpg\"]', 1, 4.5, 3, '2021-02-15', '2021-02-15'),
 (92, 'Tas Rei', 'Rei New', 600090, 0, 'Tas untuk sehari hari', 0, '[\"/images/1611195458337-image.jpg\",\"/images/1611195458345-image.jpg\"]', 7, 0, 12, '2021-01-21', '2021-01-21'),
 (95, 'Nike Black', 'Nike', 500000, 0, 'New Product', 0, '[\"/images/1611808613758-image.jpg\",\"/images/1611808613763-image.jpg\"]', 1, 0, 12, '2021-01-28', '2021-01-28');
 
