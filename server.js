@@ -1,7 +1,8 @@
-const mysql = require("mysql");
+const mySQL = require("mysql");
 const app = require("./app");
 const http = require("http");
 const socketio = require("socket.io");
+const { MYSQL_HOST, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASS } = process.env;
 
 //socket io
 const server = http.createServer(app);
@@ -40,11 +41,12 @@ io.on("connection", (socket) => {
 //socket io
 
 // Create connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "web_blanja",
+const db = mySQL.createConnection({
+  // Setting DB
+  host: MYSQL_HOST,
+  user: MYSQL_USER,
+  password: MYSQL_PASS,
+  database: MYSQL_DATABASE,
 });
 
 // Connect
