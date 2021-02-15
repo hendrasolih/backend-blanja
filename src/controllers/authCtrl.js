@@ -15,7 +15,7 @@ async function deleteOtp(otp) {
 module.exports = {
   signup: (req, res) => {
     const { body } = req;
-    console.log(body);
+    //console.log(body);
     authModel
       .postNewUser(body)
       .then(() => {

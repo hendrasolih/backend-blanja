@@ -55,7 +55,7 @@ module.exports = {
     historyModel
       .getHistoryById(id)
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         res.json({
           data,
         });
@@ -70,7 +70,7 @@ module.exports = {
     historyModel
       .getHistoryBySellerId(id)
       .then((data) => {
-        console.log(data);
+        //onsole.log(data);
         res.json({
           data,
         });
