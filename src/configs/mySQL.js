@@ -8,6 +8,7 @@ const db = mySQL.createConnection({
   user: MYSQL_USER,
   password: MYSQL_PASS,
   database: MYSQL_DATABASE,
+  insecureAuth: true,
 });
 
 db.connect((err) => {
