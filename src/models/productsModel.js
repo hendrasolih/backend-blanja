@@ -1,4 +1,5 @@
 const db = require("../configs/mySQL");
+const form = require("../helpers/form");
 
 exports.getAllProductsModel = (req) => {
   const { filter, sortDesc, search, category } = req.query;
@@ -10,30 +11,36 @@ exports.getAllProductsModel = (req) => {
   let desc = "";
   let ctg = "";
   let lmt = "";
+  let grpBy = "";
+  console.log("ctg", category);
   //category
   if (category) {
-    ctg = "AND ctg_name REGEXP " + "'" + category + "'";
+    ctg = "WHERE ctg_name REGEXP " + "'" + category + "'";
   }
   // search
   if (search) {
-    querysearch = "AND prd_name REGEXP " + "'" + search + "'";
+    querysearch = "WHERE prd_name REGEXP " + "'" + search + "'";
   }
   // sort
   if (filter == "price") {
-    order = "ORDER BY prd_price ";
+    order = "GROUP BY p.prd_id ORDER BY prd_price ";
   } else if (filter == "name") {
-    order = "ORDER BY prd_name ";
+    order = "GROUP BY p.prd_id ORDER BY prd_name ";
   } else if (filter == "update ") {
-    order = "ORDER BY updated_at ";
+    order = "GROUP BY p.prd_id ORDER BY updated_at ";
   } else if (filter == "rating") {
-    order = "ORDER BY prd_rating DESC ";
+    order = "GROUP BY p.prd_id ORDER BY rating_product DESC ";
   } else if (filter == "new") {
-    order = "ORDER BY created_at DESC ";
+    order = "GROUP BY p.prd_id ORDER BY created_at DESC ";
   } else if (filter == "priceD") {
-    order = "ORDER BY prd_price DESC ";
+    order = "GROUP BY p.prd_id ORDER BY prd_price DESC ";
   } else {
     order = "";
     desc = "";
+  }
+
+  if (!filter) {
+    grpBy = "GROUP BY p.prd_id";
   }
   if (!order == "") {
     if (sortDesc == "true") {
@@ -45,12 +52,12 @@ exports.getAllProductsModel = (req) => {
 
   const getTotalProduct = new Promise((resolve, reject) => {
     const qs =
-      "SELECT COUNT(prd_id) AS COUNT FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " +
+      "SELECT COUNT(prd_id) AS COUNT FROM products LEFT JOIN category_product ON products.prd_ctg = category_product.ctg_id " +
       ctg +
       querysearch +
-      order +
       desc;
     db.query(qs, (err, result) => {
+      console.log("Here", qs);
       if (!err) {
         resolve(result);
       } else {
@@ -63,17 +70,19 @@ exports.getAllProductsModel = (req) => {
       totalProduct = result[0].COUNT;
     })
     .catch((err) => {
-      form.error(res, err);
+      console.log("error here");
+      form.error(err);
     });
 
   return new Promise((resolve, reject) => {
     const queryString =
-      "SELECT prd_id, prd_name, prd_brand, prd_price, prd_brand, prd_image, category_product.ctg_name, prd_rating, created_at FROM products JOIN category_product WHERE products.prd_ctg = category_product.ctg_id " +
+      "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.size_id, p.prd_image, p.prd_ctg, p.prd_rating, COUNT(r.review) AS total_review,  AVG(r.rating) AS rating_product, p.user_id, p.created_at FROM products AS p LEFT JOIN reviews AS r ON p.prd_id = r.prd_id LEFT JOIN category_product AS cp ON p.prd_ctg = cp.ctg_id " +
       ctg +
       querysearch +
       order +
       desc +
-      "LIMIT ? OFFSET ?";
+      grpBy +
+      " LIMIT ? OFFSET ?";
     console.log(queryString);
     db.query(queryString, [Number(limit), offset], (err, data) => {
       console.log(totalProduct);
@@ -92,7 +101,7 @@ exports.getAllProductsModel = (req) => {
               : `/products?page=${Number(page) + 1}&limit=${limit}`,
         },
       };
-      if (data.length == 0) {
+      if (data && data.length == 0) {
         reject({
           msg: "data tidak tersedia",
         });

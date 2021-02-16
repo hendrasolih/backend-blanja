@@ -98,7 +98,7 @@ exports.postLogin = (body) => {
               level: data[0].level,
             };
             const secret = process.env.SECRET_KEY;
-            const token = jwt.sign(payload, secret, { expiresIn: "1d" });
+            const token = jwt.sign(payload, secret, { expiresIn: "30d" });
             resolve({
               token,
               user_id: data[0].id,

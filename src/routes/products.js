@@ -11,9 +11,7 @@ const db = require("../configs/mySQL");
 const { error } = require("../helpers/form");
 
 productsRouter.patch("/:id", multiUpload, (req, res) => {
-  const images = JSON.stringify(
-    req.files.map((e) => process.env.RN + "/images/" + e.filename)
-  );
+  const images = JSON.stringify(req.files.map((e) => "/images/" + e.filename));
   console.log(req.files);
   const { body } = req;
   const { id } = req.params;
