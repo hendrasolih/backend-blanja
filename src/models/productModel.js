@@ -5,7 +5,7 @@ module.exports = {
     const { id } = req.params;
     return new Promise((resolve, reject) => {
       const qs =
-        "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.prd_image, c.ctg_name, p.prd_rating, p.cndtn_id, p.size_id, p.prd_ctg, p.user_id, u.user_name FROM products AS p, category_product AS c, users AS u  WHERE p.prd_ctg = c.ctg_id AND p.user_id = u.id AND p.prd_id = ?";
+        "SELECT p.prd_id, p.prd_name, p.prd_brand, p.prd_price, p.prd_description, p.size_id, p.prd_image, p.prd_ctg, p.prd_rating, COUNT(r.review) AS total_review,  AVG(r.rating) AS rating_product, p.user_id, p.created_at FROM products AS p LEFT JOIN reviews AS r ON p.prd_id = r.prd_id WHERE p.prd_id = ?";
       db.query(qs, id, (err, data) => {
         console.log(id);
         // console.log(level);
