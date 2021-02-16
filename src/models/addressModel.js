@@ -19,7 +19,7 @@ exports.postAddress = (insertBody) => {
 exports.getAddress = (id) => {
   return new Promise((resolve, reject) => {
     const qs =
-      "SELECT a.id as id_adres, a.address, u.user_name FROM address AS a JOIN users AS u on a.user_id = u.id WHERE a.user_id = ?";
+      "SELECT a.id as id_adres, a.address, u.user_name, a.addrs_name, a.recipient FROM address AS a JOIN users AS u on a.user_id = u.id WHERE a.user_id = ?";
     db.query(qs, id, (err, data) => {
       if (!err) {
         resolve(data);
