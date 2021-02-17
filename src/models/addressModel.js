@@ -48,3 +48,40 @@ exports.deleteAddress = (id) => {
     });
   });
 };
+
+exports.editAddress = (body, id) => {
+  //includes all userData (PIN, PhoneNumber, and etc.)
+  return new Promise((resolve, reject) => {
+    const qs = `UPDATE address SET ? WHERE id = ?`;
+    db.query(qs, [body, id], (err, data) => {
+      if (!err) {
+        resolve({
+          status: 200,
+          message: `Data berhasil diubah`,
+          data: body,
+        });
+      } else {
+        reject({
+          status: 500,
+          message: err,
+        });
+      }
+    });
+  });
+};
+
+exports.getDetailAddress = (id) => {
+  return new Promise((resolve, reject) => {
+    const qs = "SELECT * FROM address WHERE id = ?";
+    db.query(qs, id, (err, data) => {
+      if (!err) {
+        resolve(data);
+      } else {
+        reject({
+          status: 500,
+          msg: "Internal Server Error",
+        });
+      }
+    });
+  });
+};

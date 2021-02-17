@@ -52,4 +52,32 @@ module.exports = {
         form.error(res, err);
       });
   },
+
+  editAddress: (req, res) => {
+    const { body } = req;
+    const { id } = req.params;
+    addressModel
+      .editAddress(body, id)
+      .then((result) => {
+        res.status(result.status).json(result);
+      })
+      .catch((error) => {
+        res.status(error.status).json(error);
+      });
+  },
+
+  getDetailAddress: (req, res) => {
+    const { id } = req.params;
+    addressModel
+      .getDetailAddress(id)
+      .then((data) => {
+        //console.log(data);
+        res.json({
+          data,
+        });
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 };
