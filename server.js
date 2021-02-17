@@ -37,6 +37,10 @@ io.on("connection", (socket) => {
     );
     io.to(id).emit("recieved customer", "Product status is Delivered now");
   });
+
+  socket.on("new order", (seller_id) => {
+    io.to(seller_id).emit("new order seller", "New Orders Received");
+  });
 });
 //socket io
 
